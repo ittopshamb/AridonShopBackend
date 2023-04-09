@@ -115,14 +115,8 @@ try
         options => options.UseSqlite($"Data Source={dbPath}"));
 
     builder.Services.AddCors();
-
-    builder.Services.AddDbContext<AppDbContext>(
-        options => options
-            .UseSqlite($"Data Source={dbPath}")
-            .EnableDetailedErrors()
-            .EnableSensitiveDataLogging()
-    );
     
+     
     builder.Host.UseSerilog((ctx, conf) =>
     {
         conf
@@ -171,7 +165,7 @@ catch (Exception ex)
 finally
 {
     Log.Information("Shut down complete");
-    Log.CloseAndFlush(); //перед выходом дожидаемся пока все логи будут записаны
+    Log.CloseAndFlush();
 }
 
 public partial class Program{}
