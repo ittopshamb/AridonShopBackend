@@ -20,15 +20,18 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
     public async Task Creating_New_Order_happens()
     {
         // Arrange
-        var httpClient = _factory.CreateClient();
-        var client = new ShopClient(httpClient: httpClient);
         var registerRequest = new RegisterRequest()
         {
             Email = _faker.Person.Email,
             Name = _faker.Person.UserName,
             Password = _faker.Internet.Password()
         };
+        var httpClient = _factory.CreateClient();
+        var client = new ShopClient(httpClient: httpClient);
         var registerResponse = await client.Register(registerRequest);
+        
+        registerResponse.AccountId.Should().NotBeEmpty();
+
         var accountId = Guid.NewGuid();
         var address = _faker.Person.Address;
         var orderRequest = new PlaceOrderRequest()
@@ -43,7 +46,6 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
         var order = await client.PlaceOrder(orderRequest);
 
         // Assert
-        registerResponse.AccountId.Should().NotBeEmpty();
         order.Should().NotBeNull();
         order.AccountId.Should().Be(accountId);
         order.Items.Should().NotBeNullOrEmpty();
