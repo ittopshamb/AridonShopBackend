@@ -34,16 +34,16 @@ public class OrderEndpointsTests: IClassFixture<CustomWebApplicationFactory<Prog
 
         var cart = new Cart(Guid.Empty, accountId, new List<CartItem>()
         {
-            new CartItem(Guid.NewGuid(), productA, 2, 10.99m),
-            new CartItem(Guid.NewGuid(), productB, 3, 5.99m),
-            new CartItem(Guid.NewGuid(), productC, 1, 19.99m)
+            new (Guid.NewGuid(), productA, 2, 10.99m),
+            new (Guid.NewGuid(), productB, 3, 5.99m),
+            new (Guid.NewGuid(), productC, 1, 19.99m)
         });
 
         var order = new Order(Guid.NewGuid(), accountId, new List<OrderItem>()
         {
-            new OrderItem(Guid.NewGuid(), productA, 2, 10.99m),
-            new OrderItem(Guid.NewGuid(), productB, 3, 5.99m),
-            new OrderItem(Guid.NewGuid(), productC, 1, 19.99m)
+            new (Guid.NewGuid(), productA, 2, 10.99m),
+            new (Guid.NewGuid(), productB, 3, 5.99m),
+            new (Guid.NewGuid(), productC, 1, 19.99m)
         });
 
         _unitOfWorkMock.Setup(uow => uow.CartRepository.GetByAccountId(accountId, default))
@@ -69,5 +69,3 @@ public class OrderEndpointsTests: IClassFixture<CustomWebApplicationFactory<Prog
         Assert.Equal(order.GetTotalPrice(), result.GetTotalPrice());
     }
 }
-
-
