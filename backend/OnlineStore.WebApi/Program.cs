@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Moq;
 using OnlineStore.Data;
 using OnlineStore.Data.Repositories;
 using OnlineStore.Domain.RepositoryInterfaces;
@@ -70,7 +69,6 @@ try
     builder.Services.AddScoped<IOrderRepository, OrderRepository>();
     builder.Services.AddScoped<IUnitOfWork, UnitOfWorkEf>();
     builder.Services.AddScoped<IEmailSender, SmtpMailKitEmailSender>();
-    builder.Services.AddScoped<IEmailSender>((sp => new Mock<IEmailSender>().Object));
     builder.Services.AddScoped<AccountService>();
     builder.Services.AddScoped<ProductService>();
     builder.Services.AddScoped<CartService>();
