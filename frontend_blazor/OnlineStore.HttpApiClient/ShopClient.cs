@@ -19,12 +19,19 @@ public class ShopClient : IShopClient
         _httpClient = httpClient ?? new HttpClient();
     }
 
-    public async Task PlaceOrder(PlaceOrderRequest order, CancellationToken cancellationToken = default)
+    public async Task<OrderResponse> PlaceOrder(PlaceOrderRequest order, CancellationToken cancellationToken = default)
     {
         if (order == null) throw new ArgumentNullException(nameof(order));
         var uri = $"{_host}/orders/create_order";
         var responseMessage = await _httpClient.PostAsJsonAsync(uri, order, cancellationToken);
-        responseMessage.EnsureSuccessStatusCode();
+        if (!responseMessage.IsSuccessStatusCode)
+        {
+            var error = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
+            throw new HttpRequestException($"Status code: {responseMessage.StatusCode} " + error);
+        }
+        var response = await responseMessage.Content.ReadFromJsonAsync<OrderResponse>(cancellationToken: cancellationToken);
+        return response!;
+        
     }
 
     public async Task<ProductsResponse> GetProducts(CancellationToken cancellationToken = default)
@@ -86,7 +93,7 @@ public class ShopClient : IShopClient
         if (!responseMessage.IsSuccessStatusCode)
         {
             var error = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
-            throw new HttpRequestException($"Statuc code: {responseMessage.StatusCode} " + error);
+            throw new HttpRequestException($"Status code: {responseMessage.StatusCode} " + error);
         }
         var response = await responseMessage.Content.ReadFromJsonAsync<RegisterResponse>(cancellationToken: cancellationToken);
         SetAuthToken(response!.Token!);
@@ -105,7 +112,7 @@ public class ShopClient : IShopClient
         if (!responseMessage.IsSuccessStatusCode)
         {
             var error = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
-            throw new HttpRequestException($"Statuc code: {responseMessage.StatusCode} " + error);
+            throw new HttpRequestException($"Status code: {responseMessage.StatusCode} " + error);
         }
         var response = await responseMessage.Content.ReadFromJsonAsync<AuthResponse>(cancellationToken: cancellationToken);
         SetAuthToken(response!.Token!);

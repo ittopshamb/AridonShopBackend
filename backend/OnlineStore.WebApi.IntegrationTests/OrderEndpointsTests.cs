@@ -1,10 +1,7 @@
-﻿using System.Net;
-using System.Net.Http.Json;
-using Bogus;
+﻿using Bogus;
 using FluentAssertions;
 using OnlineStore.HttpApiClient;
 using OnlineStore.Models.Requests;
-using OnlineStore.Models.Responses;
 
 namespace OnlineStore.WebApi.IntegrationTests;
 
@@ -33,19 +30,22 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
         };
         var registerResponse = await client.Register(registerRequest);
         var accountId = Guid.NewGuid();
-        // var city = "TestCity";
-        // var address = "TestAddress";
+        var address = _faker.Person.Address;
+        var orderRequest = new PlaceOrderRequest()
+        {
+            AccountId = Guid.Empty,
+            Address = address.Suite + ", " + address.Street,
+            City = address.City,
+            Items = new List<OrderItemRequest>()
+        };
 
         // Act
-        var response = await httpClient.PostAsJsonAsync($"/orders/create_order", new PlaceOrderRequest());
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        var order = await response.Content.ReadFromJsonAsync<OrderResponse>();
+        var order = await client.PlaceOrder(orderRequest);
 
         // Assert
         registerResponse.AccountId.Should().NotBeEmpty();
         order.Should().NotBeNull();
-        order!.AccountId.Should().Be(accountId);
+        order.AccountId.Should().Be(accountId);
         order.Items.Should().NotBeNullOrEmpty();
         order.Items.Should().HaveCount(2);
     }
