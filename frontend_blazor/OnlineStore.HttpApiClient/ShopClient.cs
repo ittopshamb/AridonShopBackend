@@ -19,6 +19,14 @@ public class ShopClient : IShopClient
         _httpClient = httpClient ?? new HttpClient();
     }
 
+    public async Task PlaceOrder(PlaceOrderRequest order, CancellationToken cancellationToken = default)
+    {
+        if (order == null) throw new ArgumentNullException(nameof(order));
+        var uri = $"{_host}/orders/create_order";
+        var responseMessage = await _httpClient.PostAsJsonAsync(uri, order, cancellationToken);
+        responseMessage.EnsureSuccessStatusCode();
+    }
+
     public async Task<ProductsResponse> GetProducts(CancellationToken cancellationToken = default)
     {
         var uri = $"{_host}/products/get_all";
