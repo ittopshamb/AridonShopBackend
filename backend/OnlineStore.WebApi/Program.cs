@@ -58,7 +58,6 @@ try
             }
         });
     });
-
     builder.Services.Configure<SmtpConfig>(builder.Configuration.GetSection("SmtpConfig"));
     builder.Services.AddScoped<HttpModelsMapper>();
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
