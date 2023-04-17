@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Moq;
 using OnlineStore.Data;
+using OnlineStore.Domain.Services;
 
 namespace OnlineStore.WebApi.IntegrationTests;
 
@@ -16,8 +18,12 @@ public class CustomWebApplicationFactory<TProgram>
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");
+        var emailFake = new Mock<IEmailSender>();
         builder.ConfigureTestServices(services =>
         {
+            services.RemoveAll<IEmailSender>();
+            services.AddScoped<IEmailSender>(sp => emailFake.Object);
+            
             services.RemoveAll<AppDbContext>();
             services.AddDbContext<AppDbContext>(
                 options => options.UseSqlite($"Data Source={DbPath}"));
