@@ -7,23 +7,25 @@ namespace OnlineStore.WebApi.IntegrationTests;
 
 public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
-    private readonly HttpClient _httpClient;
+    private readonly CustomWebApplicationFactory<Program> _factory;
 
     public OrderEndpointsTests(CustomWebApplicationFactory<Program> factory)
     {
-        _httpClient = factory.CreateClient();
+        _factory = factory;
     }
+
 
     [Fact]
     public async Task Creating_New_Order_happens()
     {
         // Arrange
+        var httpClient = _factory.CreateClient();
         var accountId = Guid.NewGuid();
         var city = "TestCity";
         var address = "TestAddress";
 
         // Act
-        var response = await _httpClient.PostAsJsonAsync($"/api/orders/place-order/{accountId}", new { city, address });
+        var response = await httpClient.PostAsJsonAsync($"/api/orders/create_order", new { city, address });
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var order = await response.Content.ReadFromJsonAsync<Order>();
