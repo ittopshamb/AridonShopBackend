@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using OnlineStore.Domain.Entities;
 using OnlineStore.Domain.Services;
 using OnlineStore.Models.Requests;
 using OnlineStore.Models.Responses;
@@ -39,7 +41,7 @@ public class ProductController : ControllerBase
         return new ProductResponse(product.Id, product.Name, product.Price, product.Image, product.Description,
             product.CategoryId);
     }
-
+    [Authorize(Roles = $"{Roles.Admin}")]
     [HttpPost("add")]
     public async Task<ActionResult<ProductResponse>> AddProduct(ProductRequest request, CancellationToken cancellationToken)
     {
@@ -48,24 +50,17 @@ public class ProductController : ControllerBase
         return new ProductResponse(product.Id, product.Name, product.Price, product.Image, product.Description,
             product.CategoryId);
     }
-
-    [HttpPut("grant_admin_update")]
+    [Authorize(Roles = $"{Roles.Admin}")]
+    [HttpPut("update")]
     public async Task<ActionResult<ProductResponse>> UpdateProduct(ProductRequest request, string key,CancellationToken cancellationToken)
     {
-        if (key != "123")
-        {
-            return new ObjectResult("Invalid key")
-            {
-                StatusCode = StatusCodes.Status403Forbidden
-            };
-        }
         var product = await _productService.UpdateProduct(request.Name, request.Price, request.Image,
             request.Description, request.CategoryId, cancellationToken);
         await _productService.GrantAdmin(product.Id, cancellationToken);
         return new ProductResponse(product.Id, product.Name, product.Price, product.Image, product.Description,
             product.CategoryId);
     }
-
+    [Authorize(Roles = $"{Roles.Admin}")]
     [HttpDelete("delete_by_id")]
     public async Task<ActionResult<ProductResponse>> DeleteProduct(Guid id, CancellationToken cancellationToken)
     {

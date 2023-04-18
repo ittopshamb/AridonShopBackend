@@ -8,7 +8,6 @@ using OnlineStore.WebApi.Mappers;
 
 namespace OnlineStore.WebApi.Controllers;
 
-[ApiController]
 [Route("categories")]
 public class CategoryController : ControllerBase
 {

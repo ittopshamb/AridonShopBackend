@@ -54,7 +54,7 @@ public class ShopClient : IShopClient
 
     public async Task UpdateProduct(Guid id, Product product, CancellationToken cancellationToken = default)
     {
-        var uri = $"{_host}/products/update?{id}";
+        var uri = $"{_host}/products/update/{id}";
         var responseMessage = await _httpClient.PutAsJsonAsync(uri, product, cancellationToken);
         responseMessage.EnsureSuccessStatusCode();
     }
@@ -162,7 +162,7 @@ public class ShopClient : IShopClient
 
     public async Task UpdateCategory(Guid id, CategoryRequest category,CancellationToken cancellationToken = default)
     {
-        var uri = $"{_host}/categories/update?id={id}";
+        var uri = $"{_host}/categories/update/{id}";
         var responseMessage = await _httpClient.PutAsJsonAsync(uri, category, cancellationToken);
         responseMessage.EnsureSuccessStatusCode();
     }
