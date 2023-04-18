@@ -36,7 +36,7 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
         var address = _faker.Person.Address;
         var orderRequest = new PlaceOrderRequest()
         {
-            AccountId = registerResponse.AccountId,
+            AccountId = accountId,
             Address = address.Suite + ", " + address.Street,
             City = address.City,
             Items = new List<OrderItemRequest>()
