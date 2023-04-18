@@ -25,7 +25,6 @@ public class CustomWebApplicationFactory<TProgram>
             services.AddScoped<IEmailSender>(sp => emailFake.Object);
             
             services.RemoveAll<AppDbContext>();
-            services.RemoveAll<IEmailSender>();
             services.AddDbContext<AppDbContext>(
                 options => options.UseSqlite($"Data Source={DbPath}"));
             using var serviceProvider = services.BuildServiceProvider();
