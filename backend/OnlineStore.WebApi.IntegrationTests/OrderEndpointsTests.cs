@@ -32,7 +32,7 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
         
         registerResponse.AccountId.Should().NotBeEmpty();
 
-        var accountId = Guid.NewGuid();
+        var accountId = registerResponse.AccountId;
         var address = _faker.Person.Address;
         var orderRequest = new PlaceOrderRequest()
         {
