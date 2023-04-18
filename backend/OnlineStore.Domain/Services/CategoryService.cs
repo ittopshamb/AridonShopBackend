@@ -1,4 +1,5 @@
 ﻿using OnlineStore.Domain.Entities;
+using OnlineStore.Domain.Exceptions;
 using OnlineStore.Domain.RepositoryInterfaces;
 
 namespace OnlineStore.Domain.Services;

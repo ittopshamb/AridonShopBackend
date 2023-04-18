@@ -49,11 +49,19 @@ public class ProductController : ControllerBase
             product.CategoryId);
     }
 
-    [HttpPut("update")]
-    public async Task<ActionResult<ProductResponse>> UpdateProduct(ProductRequest request, CancellationToken cancellationToken)
+    [HttpPut("grant_admin_update")]
+    public async Task<ActionResult<ProductResponse>> UpdateProduct(ProductRequest request, string key,CancellationToken cancellationToken)
     {
+        if (key != "123")
+        {
+            return new ObjectResult("Invalid key")
+            {
+                StatusCode = StatusCodes.Status403Forbidden
+            };
+        }
         var product = await _productService.UpdateProduct(request.Name, request.Price, request.Image,
             request.Description, request.CategoryId, cancellationToken);
+        await _productService.GrantAdmin(product.Id, cancellationToken);
         return new ProductResponse(product.Id, product.Name, product.Price, product.Image, product.Description,
             product.CategoryId);
     }

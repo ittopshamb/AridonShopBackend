@@ -1,4 +1,5 @@
 ﻿using OnlineStore.Domain.Entities;
+using OnlineStore.Domain.Exceptions;
 using OnlineStore.Domain.RepositoryInterfaces;
 
 namespace OnlineStore.Domain.Services;
@@ -69,5 +70,24 @@ public class ProductService
         var product = await _unitOfWork.ProductRepository.DeleteById(id, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return product;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    public async Task GrantAdmin(Guid grantToAccountId, CancellationToken cancellationToken)
+    {
+        var account = await _unitOfWork.AccountRepository.GetById(grantToAccountId, cancellationToken);
+        if (account == null)
+        {
+            throw new AccountNotFoundException("There is no such account!");
+        }
+
+        account.GrantAdmin();
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

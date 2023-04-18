@@ -54,12 +54,11 @@ public class AccountController : ControllerBase
     {
         if (key != "123")
         {
-            return new ObjectResult("Неверный ключ")
+            return new ObjectResult("Invalid key")
             {
                 StatusCode = StatusCodes.Status403Forbidden
             };
         }
-        
         await _accountService.GrantAdmin(accountId, cancellationToken);
         return Ok();
     }

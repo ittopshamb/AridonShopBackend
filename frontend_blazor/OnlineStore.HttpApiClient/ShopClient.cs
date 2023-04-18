@@ -54,7 +54,7 @@ public class ShopClient : IShopClient
 
     public async Task UpdateProduct(Guid id, Product product, CancellationToken cancellationToken = default)
     {
-        var uri = $"{_host}/products/update/{id}";
+        var uri = $"{_host}/products/update?{id}";
         var responseMessage = await _httpClient.PutAsJsonAsync(uri, product, cancellationToken);
         responseMessage.EnsureSuccessStatusCode();
     }
@@ -78,7 +78,7 @@ public class ShopClient : IShopClient
         if (!responseMessage.IsSuccessStatusCode)
         {
             var error = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
-            throw new HttpRequestException($"Statuc code: {responseMessage.StatusCode} " + error);
+            throw new HttpRequestException($"Status code: {responseMessage.StatusCode} " + error);
         }
         var response = await responseMessage.Content.ReadFromJsonAsync<RegisterResponse>(cancellationToken: cancellationToken);
         SetAuthToken(response!.Token!);
@@ -97,7 +97,7 @@ public class ShopClient : IShopClient
         if (!responseMessage.IsSuccessStatusCode)
         {
             var error = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
-            throw new HttpRequestException($"Statuc code: {responseMessage.StatusCode} " + error);
+            throw new HttpRequestException($"Status code: {responseMessage.StatusCode} " + error);
         }
         var response = await responseMessage.Content.ReadFromJsonAsync<AuthResponse>(cancellationToken: cancellationToken);
         SetAuthToken(response!.Token!);
@@ -160,9 +160,9 @@ public class ShopClient : IShopClient
         responseMessage.EnsureSuccessStatusCode();
     }
 
-    public async Task UpdateCategory(Guid id, CategoryRequest category, CancellationToken cancellationToken = default)
+    public async Task UpdateCategory(Guid id, CategoryRequest category,CancellationToken cancellationToken = default)
     {
-        var uri = $"{_host}/categories/update/{id}";
+        var uri = $"{_host}/categories/update?id={id}";
         var responseMessage = await _httpClient.PutAsJsonAsync(uri, category, cancellationToken);
         responseMessage.EnsureSuccessStatusCode();
     }

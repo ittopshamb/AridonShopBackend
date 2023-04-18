@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineStore.Domain.Entities;
 using OnlineStore.Domain.Services;
 using OnlineStore.Models.Requests;
@@ -7,6 +8,7 @@ using OnlineStore.WebApi.Mappers;
 
 namespace OnlineStore.WebApi.Controllers;
 
+[ApiController]
 [Route("categories")]
 public class CategoryController : ControllerBase
 {
@@ -34,21 +36,24 @@ public class CategoryController : ControllerBase
         return new CategoryResponse(category.ParentId,category.Id, category.Name);
     }
 
-
+    [Authorize(Roles = $"{Roles.Admin}")]
     [HttpPost("add")]
     public async Task<ActionResult<CategoryResponse>> AddCategory(CategoryRequest request, CancellationToken cancellationToken)
     {
         var category = await _categoryService.AddCategory(request.Name, cancellationToken);
         return new CategoryResponse(category.ParentId,category.Id, category.Name);
     }
-
+    
+    [Authorize(Roles = $"{Roles.Admin}")]
     [HttpPut("update")]
     public async Task<ActionResult<CategoryResponse>> UpdateCategory(CategoryRequest request, CancellationToken cancellationToken)
     {
+        
         var category = await _categoryService.UpdateCategory(request.Name, cancellationToken);
         return new CategoryResponse(category.ParentId,category.Id, category.Name);
     }
 
+    [Authorize(Roles = $"{Roles.Admin}")]
     [HttpDelete("delete_by_id")]
     public async Task<ActionResult<CategoryResponse>> DeleteCategory(Guid id, CancellationToken cancellationToken)
     {
