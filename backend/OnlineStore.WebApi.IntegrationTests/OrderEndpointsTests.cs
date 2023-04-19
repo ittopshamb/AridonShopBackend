@@ -42,7 +42,9 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
 
         var orderRequest = new PlaceOrderRequest
         {
+            OrderId = Guid.NewGuid(),
             AccountId = accountId,
+            OrderDate = DateTimeOffset.Now,
             Address = address.Suite + ", " + address.Street,
             City = address.City,
             Items = items
