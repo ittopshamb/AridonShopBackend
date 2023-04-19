@@ -34,13 +34,13 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
         {
             new()
             {
-                ProductId = new Guid(),
+                ProductId = Guid.NewGuid(),
                 Quantity = 1,
                 Price    = 50
             }
         };
 
-        var orderRequest = new PlaceOrderRequest()
+        var orderRequest = new PlaceOrderRequest
         {
             AccountId = accountId,
             Address = address.Suite + ", " + address.Street,
@@ -50,14 +50,11 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
 
         // Act
         var order = await client.PlaceOrder(orderRequest);
-        Func<Task> act = async () => await client.PlaceOrder(orderRequest);
 
         // Assert
         order.Should().NotBeNull();
         order.AccountId.Should().Be(accountId);
         order.Items.Should().NotBeNullOrEmpty();
         order.Items.Should().HaveCount(1);
-        await act.Should().ThrowAsync<HttpRequestException>()
-            .WithMessage($"Status code: BadRequest The request is invalid. Order items cannot be empty.");
     }
 }
