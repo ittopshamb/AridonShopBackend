@@ -22,7 +22,7 @@ public class CustomWebApplicationFactory<TProgram>
         builder.ConfigureTestServices(services =>
         {
             services.RemoveAll<IEmailSender>();
-            services.AddScoped<IEmailSender>(sp => emailFake.Object);
+            services.AddScoped<IEmailSender>(_ => emailFake.Object);
             
             services.RemoveAll<AppDbContext>();
             services.AddDbContext<AppDbContext>(

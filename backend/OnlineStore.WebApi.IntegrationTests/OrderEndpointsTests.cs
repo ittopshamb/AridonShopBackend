@@ -28,17 +28,24 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
         var httpClient = _factory.CreateClient();
         var client = new ShopClient(httpClient: httpClient);
         var registerResponse = await client.Register(registerRequest);
-
-        // registerResponse.AccountId.Should().NotBeEmpty();
-
         var accountId = registerResponse.AccountId;
         var address = _faker.Person.Address;
+        var items = new List<OrderItemRequest>()
+        {
+            new()
+            {
+                ProductId = Guid.Empty,
+                Quantity = 1,
+                Price    = 50
+            }
+        };
+
         var orderRequest = new PlaceOrderRequest()
         {
             AccountId = accountId,
             Address = address.Suite + ", " + address.Street,
             City = address.City,
-            Items = new List<OrderItemRequest>()
+            Items = items
         };
 
         // Act
@@ -49,6 +56,5 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
         order.AccountId.Should().Be(accountId);
         order.Items.Should().NotBeNullOrEmpty();
         order.Items.Should().HaveCount(2);
-
     }
 }
