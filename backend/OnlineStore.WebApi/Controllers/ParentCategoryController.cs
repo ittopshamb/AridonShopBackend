@@ -44,7 +44,6 @@ public class ParentCategoryController : ControllerBase
     }
     [Authorize(Roles = $"{Roles.Admin}")]
     [HttpPut("update")]
-    
     public async Task<ActionResult<ParentCategoryResponse>> UpdateCategory(ParentCategoryRequest request, CancellationToken cancellationToken)
     {
         var parentCategory = await _parentCategoryService.UpdateCategory(request.Name, cancellationToken);
