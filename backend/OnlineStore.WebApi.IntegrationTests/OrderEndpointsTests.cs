@@ -34,7 +34,7 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
         {
             new()
             {
-                ProductId = Guid.Empty,
+                ProductId = new Guid(),
                 Quantity = 1,
                 Price    = 50
             }
