@@ -31,7 +31,6 @@ public class ShopClient : IShopClient
         }
         var response = await responseMessage.Content.ReadFromJsonAsync<OrderResponse>(cancellationToken: cancellationToken);
         return response!;
-        
     }
 
     public async Task<ProductsResponse> GetProducts(CancellationToken cancellationToken = default)
