@@ -47,7 +47,6 @@ public class CategoryController : ControllerBase
     [HttpPut("update")]
     public async Task<ActionResult<CategoryResponse>> UpdateCategory(CategoryRequest request, CancellationToken cancellationToken)
     {
-        
         var category = await _categoryService.UpdateCategory(request.Name, cancellationToken);
         return new CategoryResponse(category.ParentId,category.Id, category.Name);
     }
