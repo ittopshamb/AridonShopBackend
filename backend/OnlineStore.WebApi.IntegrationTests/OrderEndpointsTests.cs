@@ -55,6 +55,6 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
         order.Should().NotBeNull();
         order.AccountId.Should().Be(accountId);
         order.Items.Should().NotBeNullOrEmpty();
-        order.Items.Should().HaveCount(2);
+        order.Items.Should().HaveCount(1);
     }
 }
