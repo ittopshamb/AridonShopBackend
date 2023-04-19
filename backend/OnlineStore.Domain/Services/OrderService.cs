@@ -13,13 +13,12 @@ public class OrderService
     {
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
-
     }
 
     public virtual async Task<Order> GetOrderForAccount(Guid accountId, CancellationToken cancellationToken) =>
         await _unitOfWork.OrderRepository.GetByAccountId(accountId, cancellationToken);
 
-    public virtual async Task<Order> PlaceOrderAndCreateNew(Guid accountId, string city, string address, CancellationToken cancellationToken)
+    public virtual async Task<Order> PlaceOrderAndCreateNew(Guid accountId, CancellationToken cancellationToken)
     {
         var cart = await _unitOfWork.CartRepository.GetByAccountId(accountId, cancellationToken);
         var order = new Order(Guid.NewGuid(), accountId, new List<OrderItem>());

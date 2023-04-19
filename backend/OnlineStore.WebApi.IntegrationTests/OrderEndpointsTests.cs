@@ -2,17 +2,20 @@
 using FluentAssertions;
 using OnlineStore.HttpApiClient;
 using OnlineStore.Models.Requests;
+using Xunit.Abstractions;
 
 namespace OnlineStore.WebApi.IntegrationTests;
 
 public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly ITestOutputHelper _testOutputHelper;
     private readonly Faker _faker = new("ru");
 
-    public OrderEndpointsTests(CustomWebApplicationFactory<Program> factory)
+    public OrderEndpointsTests(CustomWebApplicationFactory<Program> factory, ITestOutputHelper testOutputHelper)
     {
         _factory = factory;
+        _testOutputHelper = testOutputHelper;
     }
 
     [Fact]
@@ -51,12 +54,13 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
         };
 
         // Act
-        var order = await client.PlaceOrder(orderRequest);
-
+        var order = await client.PlaceOrder(orderRequest.AccountId);
+        _testOutputHelper.WriteLine("ORDER = " + order);
+        
         // Assert
         order.Should().NotBeNull();
         order.AccountId.Should().Be(accountId);
-        order.Items.Should().NotBeNullOrEmpty();
+        order.Items.Should().NotBeNull().And.HaveCountGreaterThan(0);
         order.Items.Should().HaveCount(1);
     }
 }

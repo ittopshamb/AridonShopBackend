@@ -31,10 +31,10 @@ public class OrderController : ControllerBase
 
     [Authorize]
     [HttpPost("create_order")]
-    public async Task<ActionResult<OrderResponse>> PlaceOrder(PlaceOrderRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<OrderResponse>> PlaceOrder(CancellationToken cancellationToken)
     {
         var accountId = User.GetAccountId();
-        var order = await _orderService.PlaceOrderAndCreateNew(accountId, request.City, request.Address, cancellationToken);
+        var order = await _orderService.PlaceOrderAndCreateNew(accountId, cancellationToken);
         return new OrderResponse(order.Items.Select(_mapper.MapOrderItemModel), order.Id, order.AccountId,
             order.OrderDate);
     }

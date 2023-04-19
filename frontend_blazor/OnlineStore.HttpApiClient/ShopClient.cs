@@ -19,17 +19,18 @@ public class ShopClient : IShopClient
         _httpClient = httpClient ?? new HttpClient();
     }
 
-    public async Task<OrderResponse> PlaceOrder(PlaceOrderRequest order, CancellationToken cancellationToken = default)
+    public async Task<OrderResponse> PlaceOrder(Guid accountId, CancellationToken cancellationToken = default)
     {
-        if (order == null) throw new ArgumentNullException(nameof(order));
         var uri = $"{_host}/orders/create_order";
-        var responseMessage = await _httpClient.PostAsJsonAsync(uri, order, cancellationToken);
+        var responseMessage = await _httpClient.PostAsJsonAsync(uri, accountId, cancellationToken);
+        // Console.WriteLine("RESPONSE MESSAGE = " + responseMessage);
         if (!responseMessage.IsSuccessStatusCode)
         {
             var error = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
             throw new HttpRequestException($"Status code: {responseMessage.StatusCode} " + error);
         }
         var response = await responseMessage.Content.ReadFromJsonAsync<OrderResponse>(cancellationToken: cancellationToken);
+        // Console.WriteLine("RESPONSE = " + response);
         return response!;
     }
 
