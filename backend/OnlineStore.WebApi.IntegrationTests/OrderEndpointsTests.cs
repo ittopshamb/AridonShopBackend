@@ -54,7 +54,7 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
         };
 
         // Act
-        var order = await client.PlaceOrder(orderRequest.AccountId);
+        var order = await client.PlaceOrder(orderRequest);
         _testOutputHelper.WriteLine("ORDER = " + order);
         
         // Assert
