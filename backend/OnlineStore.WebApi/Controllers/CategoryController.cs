@@ -28,15 +28,14 @@ public class CategoryController : ControllerBase
         return new CategoriesResponse(categories.Select(_mapper.MapCategoryModel));
     }
     
-    [Authorize(Roles = $"{Roles.Admin}")]
+    
     [HttpGet("get_by_parent_id")]
     public async Task<ActionResult<CategoriesResponse>> GetCategoriesByParentId(Guid parentId, CancellationToken cancellationToken)
     {
         var categories = await _categoryService.GetCategoriesByParentId(parentId, cancellationToken);
         return new CategoriesResponse(categories.Select(_mapper.MapCategoryModel));
     }
-
-    [Authorize(Roles = $"{Roles.Admin}")]
+    
     [HttpGet("get_by_id")]
     public async Task<ActionResult<CategoryResponse>> GetCategory(Guid id, CancellationToken cancellationToken)
     {
