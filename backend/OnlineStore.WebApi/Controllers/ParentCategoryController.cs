@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using OnlineStore.Domain.Entities;
 using OnlineStore.Domain.Services;
 using OnlineStore.Models.Requests;
 using OnlineStore.Models.Responses;
@@ -33,14 +35,15 @@ public class ParentCategoryController : ControllerBase
         return new ParentCategoryResponse(parentCategory.Id, parentCategory.Name);
     }
 
-
+    [Authorize(Roles = $"{Roles.Admin}")]
     [HttpPost("add")]
     public async Task<ActionResult<ParentCategoryResponse>> AddCategory(ParentCategoryRequest request, CancellationToken cancellationToken)
     {
         var parentCategory = await _parentCategoryService.AddCategory(request.Name, cancellationToken);
         return new ParentCategoryResponse(parentCategory.Id, parentCategory.Name);
     }
-
+    
+    [Authorize(Roles = $"{Roles.Admin}")]
     [HttpPut("update")]
     public async Task<ActionResult<ParentCategoryResponse>> UpdateCategory(Guid id, string newName, CancellationToken cancellationToken)
     {
@@ -48,6 +51,7 @@ public class ParentCategoryController : ControllerBase
         return new ParentCategoryResponse(parentCategory.Id, parentCategory.Name);
     }
 
+    [Authorize(Roles = $"{Roles.Admin}")]
     [HttpDelete("delete_by_id")]
     public async Task<ActionResult<ParentCategoryResponse>> DeleteCategory(Guid id, CancellationToken cancellationToken)
     {

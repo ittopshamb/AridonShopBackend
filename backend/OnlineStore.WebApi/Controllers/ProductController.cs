@@ -42,7 +42,7 @@ public class ProductController : ControllerBase
             product.CategoryId);
     }
 
-    
+    [Authorize(Roles = $"{Roles.Admin}")]
     [HttpPost("add")]
     public async Task<ActionResult<ProductResponse>> AddProduct(ProductRequest request, CancellationToken cancellationToken)
     {
@@ -52,6 +52,7 @@ public class ProductController : ControllerBase
             product.CategoryId);
     }
     
+    [Authorize(Roles = $"{Roles.Admin}")]
     [HttpPut("update")]
     public async Task<ActionResult<ProductResponse>> UpdateProduct(ProductRequest request, CancellationToken cancellationToken)
     {
@@ -61,7 +62,7 @@ public class ProductController : ControllerBase
             product.CategoryId);
     }
 
-    
+    [Authorize(Roles = $"{Roles.Admin}")]
     [HttpDelete("delete_by_id")]
     public async Task<ActionResult<ProductResponse>> DeleteProduct(Guid id, CancellationToken cancellationToken)
     {
