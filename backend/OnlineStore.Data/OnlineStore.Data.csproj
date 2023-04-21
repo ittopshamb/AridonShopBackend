@@ -17,11 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Migrations" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="Migrations\AppDbContextModelSnapshot.cs" />
+      <Folder Include="Migrations" />
     </ItemGroup>
 
 </Project>
