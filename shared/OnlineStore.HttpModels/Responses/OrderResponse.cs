@@ -1,4 +1,7 @@
-﻿namespace OnlineStore.Models.Responses;
+﻿using OnlineStore.Models.Requests;
+using OnlineStore.Models.Shared;
 
-public record OrderResponse(IEnumerable<OrderItemResponse> Items, Guid OrderId, Guid AccountId,
-    DateTimeOffset OrderDate);
+namespace OnlineStore.Models.Responses;
+
+public record OrderResponse(
+    IEnumerable<OrderItemDto> Items, Guid OrderId, Guid AccountId, DateTimeOffset OrderDate);

@@ -9,6 +9,7 @@ using OnlineStore.WebApi.Mappers;
 namespace OnlineStore.WebApi.Controllers;
 
 [Route("orders")]
+[ApiController]
 public class OrderController : ControllerBase
 {
     private readonly OrderService _orderService;
@@ -30,12 +31,20 @@ public class OrderController : ControllerBase
     }
 
     [Authorize]
-    [HttpPost("create_order")]
-    public async Task<ActionResult<OrderResponse>> PlaceOrder(PlaceOrderRequest request, CancellationToken cancellationToken)
+    [HttpPost("place_order")]
+    public async Task<ActionResult<OrderResponse>> PlaceOrder(
+        PlaceOrderRequest request, 
+        CancellationToken cancellationToken)
     {
         var accountId = User.GetAccountId();
-        var order = await _orderService.PlaceOrderAndCreateNew(accountId, request.City, request.Address, cancellationToken);
-        return new OrderResponse(order.Items.Select(_mapper.MapOrderItemModel), order.Id, order.AccountId,
-            order.OrderDate);
+        var order = await _orderService.PlaceOrderAndCreateNew(
+            accountId,
+            request.City,
+            request.Address,
+            request.Items.Select(_mapper.MapOrderItemModel),
+            cancellationToken
+        );
+        var items = order.Items.Select(_mapper.MapOrderItemModel);
+        return new OrderResponse(items, order.Id, order.AccountId, order.OrderDate);
     }
 }

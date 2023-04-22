@@ -13,29 +13,35 @@ public class OrderService
     {
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
-
     }
 
     public virtual async Task<Order> GetOrderForAccount(Guid accountId, CancellationToken cancellationToken) =>
         await _unitOfWork.OrderRepository.GetByAccountId(accountId, cancellationToken);
 
-    public virtual async Task<Order> PlaceOrderAndCreateNew(Guid accountId, string city, string address, CancellationToken cancellationToken)
+    public virtual async Task<Order> PlaceOrderAndCreateNew(
+        Guid accountId,
+        string city,
+        string address,
+        IEnumerable<OrderItem> orderItems,
+        CancellationToken cancellationToken)
     {
         var cart = await _unitOfWork.CartRepository.GetByAccountId(accountId, cancellationToken);
-        var order = new Order(Guid.NewGuid(), accountId, new List<OrderItem>());
-        foreach (var item in cart.Items)
-        {
-            var orderItem = new OrderItem(Guid.NewGuid(), item.ProductId, item.Quantity, item.Price);
-            order.Add(orderItem);
-        }
+        var order = new Order(Guid.NewGuid(), accountId, city, address, orderItems.ToList());
 
         await _unitOfWork.OrderRepository.Add(order, cancellationToken);
-        cart.Clear();
+        cart.ClearItems();
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        await NotifyAboutPlacedOrder(order, city, address, cancellationToken); //It should be domain event
+        
         return order;
     }
 
-    public async Task NotifyAboutPlacedOrder(Order order, string city, string address, CancellationToken cancellationToken = default)
+    public async Task NotifyAboutPlacedOrder(
+        Order order,
+        string city,
+        string address,
+        CancellationToken cancellationToken = default)
     {
         StringBuilder body = new StringBuilder()
             .AppendLine("Новый заказ обработан")

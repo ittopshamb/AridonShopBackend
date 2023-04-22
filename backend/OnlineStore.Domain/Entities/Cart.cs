@@ -48,7 +48,7 @@ public record Cart : IEntity
         return cartItem;
     }
 
-    public void Clear()
+    public void ClearItems()
     {
         _items.Clear();
     }
