@@ -51,7 +51,7 @@ public class CartService
     public virtual async Task<Cart> ClearCart(Guid accountId, CancellationToken cancellationToken)
     {
         var cart = await _unitOfWork.CartRepository.GetByAccountId(accountId, cancellationToken);
-        cart.Clear();
+        cart.ClearItems();
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return cart;
     }

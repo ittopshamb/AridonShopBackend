@@ -2,6 +2,7 @@
 using FluentAssertions;
 using OnlineStore.HttpApiClient;
 using OnlineStore.Models.Requests;
+using OnlineStore.Models.Shared;
 using Xunit.Abstractions;
 
 namespace OnlineStore.WebApi.IntegrationTests;
@@ -19,7 +20,7 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
     }
 
     [Fact]
-    public async Task Creating_New_Order_happens()
+    public async Task Place_order_succeeded()
     {
         // Arrange
         var registerRequest = new RegisterRequest()
@@ -33,14 +34,9 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
         var registerResponse = await client.Register(registerRequest);
         var accountId = registerResponse.AccountId;
         var address = _faker.Person.Address;
-        var items = new List<OrderItemRequest>()
+        var items = new List<OrderItemDto>()
         {
-            new()
-            {
-                ProductId = Guid.NewGuid(),
-                Quantity = 1,
-                Price    = 50
-            }
+            new(Guid.NewGuid(), 1, 50m)
         };
 
         var orderRequest = new PlaceOrderRequest
@@ -54,13 +50,11 @@ public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Pro
         };
 
         // Act
-        var order = await client.PlaceOrder(orderRequest);
-        _testOutputHelper.WriteLine("ORDER = " + order);
+        var orderResponse = await client.PlaceOrder(orderRequest);
         
         // Assert
-        order.Should().NotBeNull();
-        order.AccountId.Should().Be(accountId);
-        order.Items.Should().NotBeNull().And.HaveCountGreaterThan(0);
-        order.Items.Should().HaveCount(1);
+        orderResponse.Should().NotBeNull();
+        orderResponse.AccountId.Should().Be(accountId);
+        orderResponse.Items.Should().NotBeNull().And.HaveCount(1);
     }
 }
