@@ -3,20 +3,18 @@ using FluentAssertions;
 using OnlineStore.HttpApiClient;
 using OnlineStore.Models.Requests;
 using OnlineStore.Models.Shared;
-using Xunit.Abstractions;
 
 namespace OnlineStore.WebApi.IntegrationTests;
 
+[Collection("Endpoints")]
 public class OrderEndpointsTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly CustomWebApplicationFactory<Program> _factory;
-    private readonly ITestOutputHelper _testOutputHelper;
     private readonly Faker _faker = new("ru");
 
-    public OrderEndpointsTests(CustomWebApplicationFactory<Program> factory, ITestOutputHelper testOutputHelper)
+    public OrderEndpointsTests(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        _testOutputHelper = testOutputHelper;
     }
 
     [Fact]

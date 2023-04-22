@@ -5,6 +5,7 @@ using OnlineStore.Models.Requests;
 
 namespace OnlineStore.WebApi.IntegrationTests;
 
+[Collection("Endpoints")]
 public class AccountEndpointsTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly CustomWebApplicationFactory<Program> _factory;
