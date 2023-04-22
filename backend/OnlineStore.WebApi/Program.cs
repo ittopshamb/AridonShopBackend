@@ -156,9 +156,10 @@ try
 
     app.Run();
 }
-catch (Exception ex)
+catch (Exception ex) when (ex is not HostAbortedException)
 {
-    Log.Fatal(ex, "Server crashed!");
+    Log.Fatal(ex, "Unhandled exception on server startup");
+    throw;
 }
 finally
 {
