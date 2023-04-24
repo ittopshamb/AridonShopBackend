@@ -35,7 +35,7 @@ public class ProductService
         return product;
     }
 
-    public virtual async Task<Product> UpdateProduct(string name, decimal price, string image, string description,
+    public virtual async Task<Product> UpdateProduct(Guid id, string name, decimal price, string image, string description,
         Guid categoryId, CancellationToken cancellationToken)
     {
         if (name == null)
@@ -53,7 +53,7 @@ public class ProductService
             throw new ArgumentNullException(nameof(description));
         }
 
-        var product = await _unitOfWork.ProductRepository.GetByName(name, cancellationToken);
+        var product = await _unitOfWork.ProductRepository.GetById(id, cancellationToken);
         product.Name = name;
         product.Price = price;
         product.Image = image;

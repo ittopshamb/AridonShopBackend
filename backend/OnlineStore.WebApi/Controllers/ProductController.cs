@@ -56,7 +56,7 @@ public class ProductController : ControllerBase
     [HttpPut("update")]
     public async Task<ActionResult<ProductResponse>> UpdateProduct(ProductRequest request, CancellationToken cancellationToken)
     {
-        var product = await _productService.UpdateProduct(request.Name, request.Price, request.Image,
+        var product = await _productService.UpdateProduct(request.Id, request.Name, request.Price, request.Image,
             request.Description, request.CategoryId, cancellationToken);
         return new ProductResponse(product.Id, product.Name, product.Price, product.Image, product.Description,
             product.CategoryId);
