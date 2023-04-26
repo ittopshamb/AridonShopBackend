@@ -15,8 +15,8 @@ public class OrderService
         _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
     }
 
-    public virtual async Task<Order> GetOrderForAccount(Guid accountId, CancellationToken cancellationToken) =>
-        await _unitOfWork.OrderRepository.GetByAccountId(accountId, cancellationToken);
+    public virtual async Task<Order?> GetOrderForAccount(Guid accountId, CancellationToken cancellationToken) =>
+        await _unitOfWork.OrderRepository.FindByAccountId(accountId, cancellationToken);
 
     public virtual async Task<Order> PlaceOrderAndCreateNew(
         Guid accountId,
@@ -69,5 +69,5 @@ public class OrderService
 
 public class ShopConfig
 {
-    public static string ManagerEmail { get; } = "manager@aridon.com";
+    public static string ManagerEmail { get; } = "danildudyrev@mail.ru";
 }

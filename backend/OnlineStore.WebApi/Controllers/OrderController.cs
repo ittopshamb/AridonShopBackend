@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineStore.Domain.Entities;
 using OnlineStore.Domain.Services;
 using OnlineStore.Models.Requests;
 using OnlineStore.Models.Responses;
@@ -27,7 +28,7 @@ public class OrderController : ControllerBase
     public async Task<ActionResult<OrderResponse>> GetOrder(CancellationToken cancellationToken)
     {
         var order = await _orderService.GetOrderForAccount(User.GetAccountId(), cancellationToken);
-        return new OrderResponse(order.Items.Select(_mapper.MapOrderItemModel), order.Id, order.AccountId, order.OrderDate);
+        return new OrderResponse(order?.Items.Select(_mapper.MapOrderItemModel), order!.Id, order.AccountId, order.OrderDate);
     }
 
     [Authorize]
