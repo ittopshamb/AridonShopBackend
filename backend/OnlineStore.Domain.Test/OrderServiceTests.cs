@@ -21,16 +21,17 @@ public class OrderServiceTests
         var productA = Guid.NewGuid();
         var productB = Guid.NewGuid();
         var productC = Guid.NewGuid();
-        var order = new Order(Guid.NewGuid(), accountId, "Kaluga", "ул. Счастливая 33", new List<OrderItem>()
+        var order = new Order(Guid.NewGuid(), accountId, "Kaluga", "ул. Счастливая 33",
+            new List<OrderItem>()
         {
             new (Guid.NewGuid(), productA, 2, 10.99m),
             new (Guid.NewGuid(), productB, 3, 5.99m),
             new (Guid.NewGuid(), productC, 1, 19.99m)
         });
 
+        var sut = new OrderService(uow.Object, emailSenderMock.Object);
         var city = "TestCity";
         var address = "TestAddress";
-        var sut = new OrderService(uow.Object, emailSenderMock.Object);
 
         // Act
         await sut.PlaceOrderAndCreateNew(accountId, city, address, order.Items, default);

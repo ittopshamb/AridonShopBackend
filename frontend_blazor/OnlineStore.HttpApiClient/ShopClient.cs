@@ -25,14 +25,12 @@ public class ShopClient : IShopClient
         if (request == null) throw new ArgumentNullException(nameof(request));
         var uri = $"{_host}/orders/place_order";
         var responseMessage = await _httpClient.PostAsJsonAsync(uri, request, cancellationToken);
-        // Console.WriteLine("RESPONSE MESSAGE = " + responseMessage);
         if (!responseMessage.IsSuccessStatusCode)
         {
             var error = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
             throw new HttpRequestException($"Status code: {responseMessage.StatusCode} " + error);
         }
         var response = await responseMessage.Content.ReadFromJsonAsync<OrderResponse>(cancellationToken: cancellationToken);
-        // Console.WriteLine("RESPONSE = " + response);
         return response!;
     }
 
