@@ -51,7 +51,7 @@ public class OrderService
         foreach (var line in order.Items)
         {
             var subtotal = line.Price * line.Quantity;
-            body.AppendFormat("{0} x {1} (Итого: {2:c}",
+            body.AppendFormat("{0} x {1} (Итого: {2:c}) ",
                 line.Price, line.Quantity, subtotal);
         }
 
@@ -69,5 +69,5 @@ public class OrderService
 
 public class ShopConfig
 {
-    public static string ManagerEmail { get; } = "danildudyrev@mail.ru";
+    public static string ManagerEmail { get; } = "aridonshop@gmail.com";
 }

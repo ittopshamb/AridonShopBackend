@@ -139,7 +139,7 @@ try
     app.UseCors(policy =>
     {
         policy
-            .WithOrigins("http://localhost:7079", "http://localhost:5050")
+            .WithOrigins("http://localhost:7079", "http://localhost:5173")
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
